@@ -1,0 +1,29 @@
+{
+  "repository": "cstolting-collab/python-skyfield",
+  "branch": "review/cml-skyfield-2026-11-07",
+  "bundle_sha256": "6ecc0f2bc91b12db636bed22094d29a166c2c9781c64250dd1ff71ec3dac4d81",
+  "bundle_git_blob": "9b1182323d622dfea03f1e8f58bb6e80eb7bcae6",
+  "source_commits": {
+    "nan": {
+      "sha": "7ba3386442392d4870fd1a6988ac17bfbccbef17",
+      "local_sha": "91302140b3a09359c642e2638ea7326d2c4aed7c",
+      "tree": "622f7e1e279c4e97971938ea11afef4a4b9c0e2c"
+    },
+    "rate": {
+      "sha": "a2d105c6f3a517df98568dee306e2525111d53ae",
+      "local_sha": "c439d650ab54e6935c94ccfdea1ab2726280c4ee",
+      "tree": "fd453cc00bce921650646ab8b5ee11195e589689"
+    },
+    "precision": {
+      "sha": "21bad299621db23733614bea50058299d87270eb",
+      "local_sha": "10c5fd224b30eba98f77881fb3b541f8ffd57882",
+      "tree": "18d9b91e479f2ad90207a9bb70abe9932cd641bb"
+    },
+    "combined": {
+      "sha": "0d533c3223a2a9f31e0a6813421f3f7a3164c2f0",
+      "local_sha": "550483ae0c0c3a209ecbce90b99cc1cafe657ab4",
+      "tree": "6f3c8bef2b16835a1f2151dc53f14ccaa2046766"
+    }
+  },
+  "verification": "Every published code tree matches the corresponding locally tested Git tree."
+}
