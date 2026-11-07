@@ -2,6 +2,11 @@
 
 Prepared and published 7 November 2026. These contributions address NaN-star propagation and two additional almanac edge cases.
 
+## Submitted for review
+
+- [NaN-star pull request #1156](https://github.com/skyfielders/python-skyfield/pull/1156) — open for maintainer review.
+- [Almanac improvements and CML offer on #1145](https://github.com/skyfielders/python-skyfield/pull/1145#issuecomment-6709051089) — published as additions to the existing contributor's work.
+
 ## Code for review
 
 - [NaN-star fix](https://github.com/cstolting-collab/python-skyfield/commit/7ba3386442392d4870fd1a6988ac17bfbccbef17): propagate unknown positions through `.apparent()`; retain valid rows and document explicit Hipparcos filtering.

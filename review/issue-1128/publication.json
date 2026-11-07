@@ -25,5 +25,20 @@
       "tree": "6f3c8bef2b16835a1f2151dc53f14ccaa2046766"
     }
   },
-  "verification": "Every published code tree matches the corresponding locally tested Git tree."
+  "verification": "Every published code tree matches the corresponding locally tested Git tree.",
+  "submissions": {
+    "nan_pull_request": {
+      "url": "https://github.com/skyfielders/python-skyfield/pull/1156",
+      "number": 1156,
+      "head": "7ba3386442392d4870fd1a6988ac17bfbccbef17",
+      "state": "open",
+      "merged": false
+    },
+    "almanac_offer": {
+      "url": "https://github.com/skyfielders/python-skyfield/pull/1145#issuecomment-6709051089",
+      "comment_id": 6709051089,
+      "author": "cstolting-collab"
+    }
+  },
+  "publication_authorized": true
 }
