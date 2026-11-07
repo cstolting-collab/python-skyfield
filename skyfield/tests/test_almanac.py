@@ -136,6 +136,37 @@ def test_setting_a_few_microseconds_after_start_time():
     assert list(y) == [1, 1]
     assert 0.0 < (t[0] - t0) * 86400e6 < 100.0  # microseconds
 
+def test_rising_setting_and_transit_in_small_time_windows():
+    ts = api.load.timescale()
+    e = api.load('de421.bsp')
+    try:
+        observer = e['earth'] + api.wgs84.latlon(19.8256, -155.4761, 4139)
+        start = ts.utc(2026, 8, 8)
+        for body in 'sun', 'moon':
+            for find in (almanac.find_risings, almanac.find_settings,
+                         almanac.find_transits):
+                def search(t0, t1):
+                    if find is almanac.find_transits:
+                        return find(observer, e[body], t0, t1)
+                    t, y = find(observer, e[body], t0, t1,
+                                horizon_degrees=0.0)
+                    assert y.all()
+                    return t
+
+                event = search(start, start + 2.0)[0]
+                # Include the event in a 20-microsecond window, then
+                # exclude it with windows ending before or starting after.
+                for lo, hi, count in ((-10, 10, 1), (-1000, -10, 0),
+                                      (10, 1000, 0), (1000, 1000, 0)):
+                    t0 = event + lo / 86400e6
+                    t1 = event + hi / 86400e6
+                    t = search(t0, t1)
+                    assert len(t) == count
+                    assert ((t - t0) >= 0.0).all()
+                    assert ((t1 - t) >= 0.0).all()
+    finally:
+        e.close()
+
 def test_setting_when_hour_angle_does_not_change():
     # After a successful first step, the next pair of hour angles can
     # round to the same value even though their times differ.  A zero

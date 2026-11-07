@@ -388,11 +388,12 @@ def _find(observer, target, start_time, end_time, horizon_degrees, f):
 
     # Build an array of times 0.8 days apart, in the hopes that nothing
     # ever rises (or sets or transits) twice within a 0.8-day period.
+    # Keep offsets separate from the Julian date so the supplied bounds
+    # don't move by a few microseconds when their fractions are rounded.
     ts = start_time.ts
-    tt0 = start_time.tt
-    tt1 = end_time.tt
-    sample_count = int(np.ceil((tt1 - tt0) / 0.8)) + 1
-    t = ts.tt_jd(np.linspace(tt0, tt1, sample_count))
+    duration = end_time - start_time
+    sample_count = int(np.ceil(duration / 0.8)) + 1
+    t = start_time + np.linspace(0.0, duration, sample_count)
 
     # Determine the target's hour angle and declination at those times.
     _fastify(t)
@@ -425,8 +426,7 @@ def _find(observer, target, start_time, end_time, horizon_degrees, f):
     # `t[i]` doesn't get rounded back to exactly `t[i]` (#1128).
     a = difference[i]
     b = tau - difference[i + 1]
-    tt = t.tt
-    t = ts.tt_jd(tt[i], (tt[i+1] - tt[i]) * a / (a + b))
+    t = t[i] + (t[i+1] - t[i]) * a / (a + b)
 
     def normalize_zero_to_tau(radians):
         return radians % tau
