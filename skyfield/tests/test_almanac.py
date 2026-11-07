@@ -1,4 +1,4 @@
-from numpy import array, concatenate as concat
+from numpy import array, concatenate as concat, errstate, isfinite
 from skyfield import api, almanac
 
 # Compare with USNO:
@@ -135,6 +135,26 @@ def test_setting_a_few_microseconds_after_start_time():
     assert strings == ['2026-08-08 05:01:52', '2026-08-09 05:01:15']
     assert list(y) == [1, 1]
     assert 0.0 < (t[0] - t0) * 86400e6 < 100.0  # microseconds
+
+def test_setting_when_hour_angle_does_not_change():
+    # After a successful first step, the next pair of hour angles can
+    # round to the same value even though their times differ.  A zero
+    # rate then makes the following time adjustment divide by zero.
+    ts = api.load.timescale()
+    t0 = ts.tt_jd(2461260.709134074)
+    e = api.load('de421.bsp')
+    try:
+        observer = e['earth'] + api.wgs84.latlon(0, -155.4761, 4139)
+        with errstate(divide='raise', invalid='raise'):
+            t, y = almanac.find_settings(
+                observer, e['sun'], t0, t0 + 1.05,
+                horizon_degrees=-7.779891398269016)
+        assert isfinite(t.tt).all()
+        assert list(y) == [True, True]
+        assert abs((t[0] - t0) * 86400) < 0.0001
+        assert t[1].utc_strftime('%Y-%m-%d %H:%M:%S') == '2026-08-09 04:59:49'
+    finally:
+        e.close()
 
 def test_dark_twilight_day():
     ts = api.load.timescale()

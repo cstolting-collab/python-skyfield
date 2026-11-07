@@ -435,6 +435,7 @@ def _find(observer, target, start_time, end_time, horizon_degrees, f):
         return (radians + pi) % tau - pi
 
     normalize = normalize_zero_to_tau
+    ha_per_day = np.full(t.shape, tau)
 
     # How did we decide on this many iterations?  We played with the
     # script ./design/test_sunrise_moonrise.py in the repository.
@@ -456,12 +457,11 @@ def _find(observer, target, start_time, end_time, horizon_degrees, f):
         if i < 2:
             ha_diff = normalize(ha.radians - old_ha_radians)
             t_diff = t - old_t
-            # If `t` didn't move, there's no rate to measure, so assume
-            # about one turn of the sky per day instead of 0/0 (#1128).
-            stuck = (t_diff == 0.0)
-            ha_diff[stuck] = tau
-            t_diff[stuck] = 1.0
-            ha_per_day = ha_diff / t_diff
+            # If time or hour angle didn't move, keep the previous rate
+            # (initially about one turn per day) instead of dividing by
+            # zero here or in the time adjustment below (#1128).
+            np.divide(ha_diff, t_diff, out=ha_per_day,
+                      where=(t_diff != 0.0) & (ha_diff != 0.0))
 
         # Remember this iteration's HA and `t` for the next iteration.
         old_ha_radians = ha.radians
